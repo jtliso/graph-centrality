@@ -1,4 +1,4 @@
-# Finds the degree centrality of a given graph
+# Finds the eigenvector centrality of a given graph
 import networkx as nx
 import sys
 import operator
@@ -30,14 +30,5 @@ def create_graph(fname):
         G.add_edge(a, b)
     return G
 
-times = []
-
-for i in range(5, 10005, 10):
-    G =  nx.gnm_random_graph(i, 2*i)
-    print i
-    start_time = time.time()
-    degree_centrality(G)
-    times.append(time.time() - start_time)
-
-plt.scatter(np.arange(5, 10005, 10), times)
-plt.show()
+G = create_graph('../data/bio-yeast.el')
+print nx.eigenvector_centrality_numpy(G)
