@@ -32,12 +32,22 @@ def create_graph(fname):
 
 times = []
 
-for i in range(5, 10005, 10):
-    G =  nx.gnm_random_graph(i, 2*i)
+x = np.arange(5, 5000, 100)
+
+for i in range(5, 5000, 100):
+    G =  nx.dense_gnm_random_graph(i, i*i)
     print i
     start_time = time.time()
     degree_centrality(G)
-    times.append(time.time() - start_time)
+    times.append((time.time() - start_time)*1000)
 
-plt.scatter(np.arange(5, 10005, 10), times)
-plt.show()
+plt.scatter(x, times)
+
+z = np.polyfit(x, times, 2)
+p = np.poly2d(z)
+plt.plot(x,p(x),"r--")
+
+plt.xlabel('Number Vertices')
+plt.ylabel('Time (ms)')
+plt.title('Degree Centrality: Dense Undirected')
+plt.savefig('degree-dense.png')
