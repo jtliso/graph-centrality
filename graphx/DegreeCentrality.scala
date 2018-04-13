@@ -3,11 +3,6 @@ import scala.collection.mutable.HashMap
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.graphx._
 
-/**
-  * Created by Ilias Sarantopoulos on 4/27/16.
-  * Degree centrality is calculated for each vertex as follows:
-  * d(u) = u.degree / Total_number_of_vertices_in_graph -1
-  */
 object DegreeCentrality {
 
   def main(args: Array[String]) {
