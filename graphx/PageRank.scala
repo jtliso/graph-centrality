@@ -1,13 +1,7 @@
-//package org.centrality.spark
 import org.apache.spark.graphx.GraphLoader
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.log4j.{Level, Logger}
 
-/**
-  * Created by Ilias Sarantopoulos on 5/6/16.
-  * Running GraphX PageRank example from documentation
-  * on my twitter network
-  */
 object PageRank {
   def main(args: Array[String]) {
     val time0 = System.currentTimeMillis()
