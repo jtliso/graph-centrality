@@ -11,34 +11,39 @@ object DegreeCentrality {
     val conf = new SparkConf().setAppName("Degree").setMaster("local").set("spark.driver.allowMultipleContexts", "true")
     val sc = new SparkContext(conf)
 
-    val graph = GraphLoader.edgeListFile(sc, "/C:/Users/JT/Documents/CS/CS560/graphx/data/bio-yeast.el")
+   for(i <- 100 to 8200 by 100){
+      val time0 = System.currentTimeMillis()
+      var fname = "../data/random/"
+      fname = fname.concat(i.toString).concat(".el")
 
-    //normalization factor is 1/node_count-1
-    val normalizationFactor:Float = 1f/(graph.vertices.count()-1)
-    val degrees: VertexRDD[Int] = graph.degrees.persist()
+      val graph = GraphLoader.edgeListFile(sc, fname)
 
-    //sort vertices on descending degree value
-    val normalized = degrees.map((s => (s._1, s._2*normalizationFactor)))
-    val users = sc.textFile("/C:/Users/JT/Documents/CS/CS560/graphx/data/bio-yeast.el").map { line =>  val
-    fields = line
-      .split("\t")
-      (fields(0).toLong, fields(1))
+      //normalization factor is 1/node_count-1
+      val normalizationFactor:Float = 1f/(graph.vertices.count()-1)
+      val degrees: VertexRDD[Int] = graph.degrees.persist()
+
+      //sort vertices on descending degree value
+      val normalized = degrees.map((s => (s._1, s._2*normalizationFactor)))
+      val users = sc.textFile(fname).map { line =>  val
+      fields = line
+        .split("\t")
+        (fields(0).toLong, fields(1))
+      }
+
+      val ranksByUsername = users.join(normalized).map {
+        case (id, (username, score)) => (username, score)
+      }
+
+      val sorted = ranksByUsername.sortBy(- _._2)
+
+      //print time elapsed
+      val time1 = System.currentTimeMillis()
+      println(s"Executed in ${(time1-time0)/1000.0} seconds")
     }
-
-    val ranksByUsername = users.join(normalized).map {
-      case (id, (username, score)) => (username, score)
-    }
-
-    val sorted = ranksByUsername.sortBy(- _._2)
-
-    //print time elapsed
-    val time1 = System.currentTimeMillis()
-    println(s"Executed in ${(time1-time0)/1000.0} seconds")
-    
     //print top 10 vertices
-    for ((vertexId, degree) <- sorted.take(10)){
-      println(s"User with name: ${vertexId} has a degree centrality of ${degree}")
-    }
+    //for ((vertexId, degree) <- sorted.take(10)){
+      //println(s"User with name: ${vertexId} has a degree centrality of ${degree}")
+  //  }
 
   }
 

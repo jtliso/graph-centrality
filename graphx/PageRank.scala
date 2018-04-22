@@ -12,11 +12,11 @@ object PageRank {
     rootLogger.setLevel(Level.ERROR)
 
     // Load the edges as a graph
-    val graph = GraphLoader.edgeListFile(sc, "/C:/Users/JT/Documents/CS/CS560/graphx/data/bio-yeast.el")
+    val graph = GraphLoader.edgeListFile(sc, "../data/bio-yeast.el")
 
     val ranks = graph.pageRank(0.0001).vertices
     // Join the ranks with the usernames
-    val users = sc.textFile("/C:/Users/JT/Documents/CS/CS560/graphx/data/bio-yeast.el").map { line =>  val
+    val users = sc.textFile("../data/bio-yeast.el").map { line =>  val
     fields = line
       .split("\t")
       (fields(0).toLong, fields(1))
