@@ -19,7 +19,7 @@ import scala.collection.mutable.Queue
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ListBuffer
 
-  object KBetweenness {
+  object KBetweenness extends Serializable{
         def run[VD: ClassTag, ED: ClassTag](
                     graph: Graph[VD, ED], k: Int): Graph[Double, Double] = {
             val kGraphletsGraph =
@@ -170,25 +170,32 @@ object kBCDriver {
 
     // Graph partition params
     val DEFAULT_K = 2
-    val DEFAULT_EDGE_PARTITIONS=60
+    val DEFAULT_EDGE_PARTITIONS=10
     val DEFAULT_CANONICAL_ORIENTATION=true
-    val k = 2
-    val canonicalOrientation = DEFAULT_CANONICAL_ORIENTATION
-    val numEdgePartitions = 60
+    val k = 1
+  //  val canonicalOrientation = DEFAULT_CANONICAL_ORIENTATION
+    val canonicalOrientation = true
+    val numEdgePartitions = 1
 
     // Read graph
-    val graph = GraphLoader.edgeListFile(sc, "/C:/Users/JT/Documents/CS/CS581/graph-centrality/data/random/8200.el", canonicalOrientation, numEdgePartitions).partitionBy(PartitionStrategy.EdgePartition2D)
-    println(Calendar.getInstance().getTime().toString + " vertices : " + graph.vertices.count())
-    println(Calendar.getInstance().getTime().toString + " edges : " + graph.edges.count())
+    for( i <- 100 to 8200 by 100){
+      val time0 = System.currentTimeMillis()
+      var fname = "../data/random/"
+      fname = fname.concat(i.toString).concat(".el")
+
+      val graph = GraphLoader.edgeListFile(sc, fname)//, canonicalOrientation, numEdgePartitions).partitionBy(PartitionStrategy.EdgePartition2D)
+    //println(Calendar.getInstance().getTime().toString + " vertices : " + graph.vertices.count())
+    //println(Calendar.getInstance().getTime().toString + " edges : " + graph.edges.count())
     
     // Run kBC
-    println(Calendar.getInstance().getTime().toString + ": start kBC")
+    //println(Calendar.getInstance().getTime().toString + ": start kBC")
     val kBCGraph = 
       KBetweenness.run(graph, k)
 
     //print time elapsed
     val time1 = System.currentTimeMillis()
     println(s"Executed in ${(time1-time0)/1000.0} seconds")
+   }
   }
 
   
