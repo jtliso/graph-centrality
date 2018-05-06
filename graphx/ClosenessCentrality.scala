@@ -20,8 +20,8 @@ object ClosenessCentrality {
       val shorts = lib.ShortestPaths.run(graph, vertexSequence)
  
       val closeness = shorts.vertices.map(vertex => (vertex._1 , 1f/vertex._2.values.sum))
-	    time1 = System.currentTimeMillis()
-	    run = (time1-time0)/10000.0
+      val time1 = System.currentTimeMillis()
+      val run = (time1-time0)/10000.0
       println(s"Closeness derived in ${run} seconds")
 	  
       //sort vertices on descending degree value

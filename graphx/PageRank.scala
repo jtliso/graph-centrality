@@ -31,11 +31,11 @@ object PageRank {
         (fields(0).toLong, fields(1))
       }
 
-      val ranks = vertices.join(ranks).map {
+      val finalranks = vertices.join(ranks).map {
         case (id, (vname, rank)) => (vname, rank)
       }
 
-      val sorted = ranksByUsername.sortBy(- _._2)
+      val sorted = finalranks.sortBy(- _._2)
       val time1 = System.currentTimeMillis()
       val run = (time1-time0)/10000.0
       println(s"PageRank derived in ${run} seconds")

@@ -51,11 +51,11 @@ object EigenvectorCentrality {
                   (v, u) => (v + u)
           )
 
-          rankGraph = rankGraph.outerJoinVertices(newVertices){ (vid, old, new) => new.getOrElse(0) }
+          rankGraph = rankGraph.outerJoinVertices(newVertices){ (vid, old, newv) => newv.getOrElse(0) }
 
           //calculate convergence as the sum of absolute differences of old and new eigenvalue of each vertex
           convergence = oldGraph
-            .outerJoinVertices(rankGraph.vertices){(vid, old, new)=> math.abs(new.get-old)}
+            .outerJoinVertices(rankGraph.vertices){(vid, old, newv)=> math.abs(newv.get-old)}
             .vertices.map(x => x._2).sum()
 
           oldGraph = rankGraph
